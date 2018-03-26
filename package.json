@@ -1,0 +1,29 @@
+{
+  "name": "api-test-kifran",
+  "version": "1.0.0",
+  "description": "API-TEST-Kifran",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon -e js,html,css,json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kifran72/API-TEST-Kifran.git"
+  },
+  "author": "kifran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kifran72/API-TEST-Kifran/issues"
+  },
+  "homepage": "https://github.com/kifran72/API-TEST-Kifran#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "generate-password": "^1.4.0",
+    "mongoose": "^5.0.11",
+    "mysql": "^2.15.0",
+    "nodemon": "^1.17.2",
+    "twig": "^1.10.5"
+  }
+}
