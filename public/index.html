@@ -114,8 +114,7 @@
                                 <li ng-repeat="user in users">
                                     {[{ user.username }]}
                                     <img src="{[{user.img_url}]}" alt="user.username">
-                                    <input type="button" value="Créer l'utilisateur :D" ng-click="createUser(user.id, user.username, user.nbr_tickets, user.account_type, user.img_url)">
-
+                                    <input type="button" value="Créer l'utilisateur :D" ng-click="createUser(user.id, user.username, user.nbr_tickets, user.account_type, user.img_url)"> {[{ user.message }]}
                                 </li>
                             </ul>
                         </div>
@@ -148,7 +147,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 
     <!-- exemple.js -->
-    <script src="/js/exemple.js"></script>
+    <script src="/js/insertUsers.js"></script>
 
 </body>
 

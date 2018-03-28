@@ -22,15 +22,16 @@ app.engine('html', twig.__express);
 app.set('twig options', {
     strict_variables: false,
 });
-
 app.use('/vendor', express.static('public/vendor'));
 app.use('/dist', express.static('public/dist'));
 app.use('/less', express.static('public/less'));
 app.use('/js', express.static('public/js'));
 
+// VARIABLES 
+
 app.get('/', function (req, res) {
     res.render('index', {
-        message: "Bienvenue a la racine !!"
+        message: "Bienvenue a la racine."
     });
 });
 
@@ -85,13 +86,20 @@ app.post('/createUser', function (req, res) {
             con.query(sql, [id, username, password, nbr_tickets, account_type, img_url], function (err, result) {
                 if (err) throw err;
                 console.log(result);
+                res.send({
+                    id: id,
+                    success: true,
+                    message: "Utilisateur crée !"
+                });
             });
         } else {
             console.log("Utilisateur déjà existant en BDD.");
+            res.send({
+                id: id,
+                success: false,
+                message: "Utilisateur déjà existant en BDD."
+            });
         }
-
-
-
     })
 });
 
