@@ -1,12 +1,15 @@
 let express = require('express');
+let session = require('express-session');
+let cookieParser = require('cookie-parser');
 let generator = require('generate-password');
-let app = express();
 let bodyParser = require('body-parser');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
+let passport = require('passport');
+let LocalStrategy = require('passport-local').Strategy;
+let flash = require('connect-flash');
 let twig = require("twig");
 // let mongoose = require('mongoose');
+// let configDB = require('./config/database.js');
+// mongoose.connect(configDB.url);
 let mysql = require('mysql');
 let con = mysql.createConnection({
     host: "localhost",
@@ -14,96 +17,42 @@ let con = mysql.createConnection({
     password: "",
     database: "api"
 });
+let port = process.env.PORT || 3000;
+let app = express();
 
-// ROUTE
+// permet d'utiliser ces dossiers grace a une route static
+app.use('/vendor', express.static('./public/vendor'));
+app.use('/dist', express.static('./public/dist'));
+app.use('/less', express.static('./public/less'));
+app.use('/js', express.static('./public/js'));
+app.use('/css', express.static('./public/css'));
+
+// initialise cookiparser, bodyparser et indique le moteur de template (twig) ainssi que le dossier default et le type de vue 
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.set('views', 'public');
 app.set('view engine', 'html');
 app.engine('html', twig.__express);
 app.set('twig options', {
     strict_variables: false,
 });
-app.use('/vendor', express.static('public/vendor'));
-app.use('/dist', express.static('public/dist'));
-app.use('/less', express.static('public/less'));
-app.use('/js', express.static('public/js'));
 
-// VARIABLES 
-
-app.get('/', function (req, res) {
-    res.render('index', {
-        message: "Bienvenue a la racine."
-    });
-});
+// initialise une session
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 }
+}))
 
 
-// mongoose.Promise = global.Promise;
-// mongoose.connect('mongodb://localhost:27017/try', function (err) {
-//     if (err) { throw err; 
-//         console.log("Connected!");
+// ROUTE
 
-//     }
-// });
-
-// let usersSchema = new mongoose.Schema({
-//     username: String,
-//     nbr_ticket: Number,
-//     img: String,
-//     password: String
-// });
-
-// let usersModel = mongoose.model('users', usersSchema);
+require('./app/routes.js')(app, session, passport, generator, con);
 
 
+// launch ======================================================================
 
-app.post('/createUser', function (req, res) {
-    // let final = new usersSchema(req.body.username);
-    // final.save()
-    // .then(item => {
-    //     res.send("item saved to database");
-    //     })
-    //     .catch(err => {
-    //     res.status(400).send("unable to save to database");
-    //     });
-    //    });
-    let id = req.body.id;
-    let username = req.body.username;
-    let nbr_tickets = req.body.nbr_tickets;
-    let account_type = req.body.account_type;
-    let img_url = req.body.img_url;
-
-
-    let password = generator.generate({
-        length: 10,
-        numbers: true
-
-    });
-    let search = 'SELECT username FROM users WHERE username = ?';
-    con.query(search, [username], function (err, result, fields) {
-        if (err) throw err;
-        console.log(result);
-        if (result.length == 0) {
-            let sql = 'INSERT INTO users(id, username, password, nbr_tickets, account_type, img_url) VALUES(?,?,?,?,?,?)';
-            con.query(sql, [id, username, password, nbr_tickets, account_type, img_url], function (err, result) {
-                if (err) throw err;
-                console.log(result);
-                res.send({
-                    id: id,
-                    success: true,
-                    message: "Utilisateur crée !"
-                });
-            });
-        } else {
-            console.log("Utilisateur déjà existant en BDD.");
-            res.send({
-                id: id,
-                success: false,
-                message: "Utilisateur déjà existant en BDD."
-            });
-        }
-    })
-});
-
-app.listen(3000);
-
-
-
+app.listen(port);
+console.log('N°port: ' + port);

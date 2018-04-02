@@ -1,6 +1,5 @@
 let app = angular.module("myApp", []);
 
-
 app.controller("insertUsers", function ($scope, $http) {
 
     // SCOPES
