@@ -23,7 +23,8 @@ module.exports = function (app, session, passport, generator, con) {
 
     });
 
-    // Creation de la route '/login' pour envoyer des information dur cette route, récuperation des info du formulaire login.html et recherche dans la base de donnée si il existe pour permettre la connexion
+    // Creation de la route '/login' pour envoyer des information sur cette route, récuperation des info du formulaire login.html et 
+    // recherche dans la base de donnée si il existe pour permettre la connexion
     // Atribution de session.connected et session.account_type pour permettre de envoyer le client au bonne endroit 
     app.post('/login', function (req, res) {
         let username = req.body.username;
@@ -62,7 +63,7 @@ module.exports = function (app, session, passport, generator, con) {
         })
     });
 
-    // Récuperation des données de l'API traiter par la page gestionUser.html et  test dans la base si il existe sinon inscription et generation de mot de passe aléatoirement
+    // Récuperation des données de l'API traiter par la page gestionUser.html et test dans la base si il existe sinon inscription et generation de mot de passe aléatoirement
     app.post('/createUser', function (req, res) {
         let id = req.body.id;
         let username = req.body.username;
